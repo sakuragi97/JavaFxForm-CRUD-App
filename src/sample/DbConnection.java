@@ -4,7 +4,7 @@ import java.security.spec.ECField;
 import java.sql.*;
 import java.lang.Exception;
 
-public class DbConnection{
+public class DbConnection {
 
     static final private String DbName = "com.mysql.jdbc.Driver";
     static final private String DbURL = "jdbc:mysql://localhost:3306/javafxform?serverTimezone=UTC";
@@ -42,11 +42,11 @@ public class DbConnection{
         DbConnection.preparedStatement = preparedStatement;
     }
 
-    public static boolean verifyConnection() throws Exception{
-        try{
+    public static boolean verifyConnection() throws Exception {
+        try {
             Class.forName(DbName);
-        connection = DriverManager.getConnection(DbURL,DbUser,DbPassword);
-        }catch (Exception e){
+            connection = DriverManager.getConnection(DbURL, DbUser, DbPassword);
+        } catch (Exception e) {
             System.out.println("SQL CONNECTION ERROR: " + e.getMessage());
             connection.close();
             return false;
@@ -55,10 +55,10 @@ public class DbConnection{
     }
 
     public static boolean getData() throws Exception {
-        try{
+        try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from client");
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
             resultSet.close();
             statement.close();
@@ -69,16 +69,16 @@ public class DbConnection{
         return true;
     }
 
-    public static boolean setData(String nomPrenom, String email, String password, String phone) throws Exception{
+    public static boolean setData(String nomPrenom, String email, String password, String phone) throws Exception {
         DbQuery = "INSERT INTO client(nomPrenom,email,pass,phone) values (?,?,?,?)";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(DbQuery);
-            preparedStatement.setString(1,nomPrenom);
-            preparedStatement.setString(2,email);
-            preparedStatement.setString(3,password);
-            preparedStatement.setString(4,phone);
+            preparedStatement.setString(1, nomPrenom);
+            preparedStatement.setString(2, email);
+            preparedStatement.setString(3, password);
+            preparedStatement.setString(4, phone);
             preparedStatement.executeUpdate();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
             resultSet.close();
             preparedStatement.close();
@@ -95,11 +95,11 @@ public class DbConnection{
 
     public static boolean deletData(int idClient) throws Exception {
         DbQuery = "DELETE from client where clientID = ?";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(DbQuery);
-            preparedStatement.setInt(1,idClient);
+            preparedStatement.setInt(1, idClient);
             preparedStatement.executeUpdate();
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
             resultSet.close();
             preparedStatement.close();
@@ -111,5 +111,89 @@ public class DbConnection{
         connection.close();
         System.out.println("DELETE DONE SUCCESSFULLY!");
         return true;
+    }
+
+
+    public static boolean modifyName(int idClient, String nomPrenom) throws Exception {
+        DbQuery = "UPDATE client SET nomPrenom = ? WHERE clientID = ?";
+
+        try {
+            preparedStatement = connection.prepareStatement(DbQuery);
+            preparedStatement.setString(1, nomPrenom);
+            preparedStatement.setInt(2, idClient);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("MODIFY FAILED!");
+            return false;
+        }
+        System.out.println("MODIFY NAME DONE SUCCESSFULLY!");
+        return true;
+    }
+
+
+    public static boolean modifyEmail(int idClient, String email) throws Exception{
+        DbQuery = "UPDATE client SET email = ? WHERE clientID = ?";
+        try {
+            preparedStatement = connection.prepareStatement(DbQuery);
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, idClient);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("MODIFY FAILED!");
+            return false;
+        }
+        System.out.println("MODIFY EMAIL DONE SUCCESSFULLY!");
+        return true;
+
+    }
+
+    public static boolean modifyPass(int idClient, String password) throws Exception{
+        DbQuery = "UPDATE client SET pass = ? WHERE clientID = ?";
+
+        try {
+            preparedStatement = connection.prepareStatement(DbQuery);
+            preparedStatement.setString(1, password);
+            preparedStatement.setInt(2, idClient);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("MODIFY FAILED!");
+            return false;
+        }
+        System.out.println("MODIFY PASS DONE SUCCESSFULLY!");
+        return true;
+
+    }
+
+    public static boolean modifyPhone(int idClient, String phone) throws Exception{
+        DbQuery = "UPDATE client SET phone = ? WHERE clientID = ?";
+
+        try {
+            preparedStatement = connection.prepareStatement(DbQuery);
+            preparedStatement.setString(1, phone);
+            preparedStatement.setInt(2, idClient);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("SQL STATEMENT ERROR: " + e.getMessage());
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+            System.out.println("MODIFY FAILED!");
+            return false;
+        }
+        System.out.println("MODIFY PHONE DONE SUCCESSFULLY!");
+        return true;
+
     }
 }
