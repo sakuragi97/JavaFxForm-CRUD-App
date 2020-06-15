@@ -174,6 +174,28 @@ public class Main extends Application {
                     });
         });
 
+        //Modify Button Event
+        modify.setOnAction(e -> {
+            String nameInput = t1.getText();
+            String emailInput = t2.getText();
+            String passInput = t3.getText();
+            String phoneInput = t4.getText();
+
+            ObservableList<Client> clientSelected;
+            clientSelected = finalTableClient.getSelectionModel().getSelectedItems();
+            clientSelected.forEach(client1 -> {
+                try{
+                    modifyClient(client1, new Client (nameInput, emailInput, passInput, phoneInput));
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            });
+            t1.clear();
+            t2.clear();
+            t3.clear();
+            t4.clear();
+        });
+
         hBoxLayout0.getChildren().addAll(submit,update,delete,modify);
         layout.getChildren().addAll(l1,t1,l2,t2,l3,t3,l4,t4,hBoxLayout0,l5, finalTableClient2);
         scene.getStylesheets().add("style.css");
@@ -181,7 +203,7 @@ public class Main extends Application {
     }
 
 
-        /* Database Connection */
+    /* Database Connection */
 
     private ObservableList<Client> getClient() throws Exception {
         ObservableList<Client> clients = FXCollections.observableArrayList();
@@ -218,6 +240,26 @@ public class Main extends Application {
 
     }
 
+    private void modifyClient(Client client1,Client client2) throws Exception {
+        if (DbConnection.verifyConnection()) {
+            System.out.println(client2.getNomPrenom());
+            if(!client2.getNomPrenom().equals("")){
+                DbConnection.modifyName(client1.getIdClient(), client2.getNomPrenom());
+            }
+            if(!client2.getEmail().equals("")){
+                DbConnection.modifyEmail(client1.getIdClient(), client2.getEmail());
+            }
+            if(!client2.getPassword().equals("")){
+                DbConnection.modifyPass(client1.getIdClient(), client2.getPassword());
+            }
+            if(!client2.getPhone().equals("")){
+                DbConnection.modifyPhone(client1.getIdClient(), client2.getPhone());
+            }
+            DbConnection.getPreparedStatement().close();
+            DbConnection.getConnection().close();
+
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);

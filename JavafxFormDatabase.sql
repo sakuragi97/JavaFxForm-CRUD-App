@@ -14,4 +14,10 @@ INSERT INTO client(nomPrenom,email,pass,phone)
 values ('Ahmed Al Asseri', 'ahmedAl.asseri@gmail.com','A88CE8F','+21264857444'),
 ('Mohammed Bendada','mohammed.elbachiri@gmail.com','123456','+212626975768');
 
+UPDATE client SET nomPrenom = 'nameChanged', 
+					email = 'email@changed.com', 
+					pass = 'pass256Changed',
+					phone = '+phone7489Changed'
+ WHERE clientID = 4;
+
 select * from client;
